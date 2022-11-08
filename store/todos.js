@@ -19,7 +19,8 @@ export const mutations = {
     state.tasks.splice(state.tasks.indexOf(task), 1)
   },
   toggle(state, task) {
-    task.done = !task.done
+    const todo = state.tasks.find((item) => item.id === task.id)
+    todo.done = task.done
   },
 }
 
@@ -36,5 +37,12 @@ export const actions = {
       todo
     )
     commit('add', task)
+  },
+  async toggleTask({ commit }, todo) {
+    const task = await this.$axios.$put(
+      `https://6368e81715219b849609f2b8.mockapi.io/api/v1/tasks/${todo.id}`,
+      { done: !todo.done }
+    )
+    commit('toggle', task)
   },
 }
