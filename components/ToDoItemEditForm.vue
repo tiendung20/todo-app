@@ -4,6 +4,7 @@
       <label class="edit-label">Edit Name for &quot;{{ label }}&quot;</label>
       <input
         :id="id"
+        ref="labelInput"
         v-model.lazy.trim="newLabel"
         type="text"
         autocomplete="off"
@@ -38,6 +39,10 @@ export default {
     return {
       newLabel: this.label,
     }
+  },
+  mounted() {
+    const labelInputRef = this.$refs.labelInput
+    labelInputRef.focus()
   },
   methods: {
     onSubmit() {
