@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <h1>My To-Do List</h1>
+    <to-do-form @todo-added="addToDo"></to-do-form>
     <ul>
       <li v-for="item in ToDoItems" :key="item.id">
         <to-do-item
@@ -14,6 +15,8 @@
 </template>
 
 <script>
+import uniqueId from 'lodash.uniqueid'
+
 export default {
   computed: {
     ToDoItems() {
@@ -22,6 +25,15 @@ export default {
   },
   created() {
     this.$store.dispatch('todos/getTasks')
+  },
+  methods: {
+    addToDo(toDoLabel) {
+      this.$store.dispatch('todos/addTask', {
+        id: uniqueId(),
+        label: toDoLabel,
+        done: false,
+      })
+    },
   },
 }
 </script>

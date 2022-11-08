@@ -12,14 +12,14 @@ export const mutations = {
   store(state, tasks) {
     state.tasks = tasks
   },
-  add(state, todo) {
-    state.tasks.push(todo)
+  add(state, task) {
+    state.tasks.push(task)
   },
-  remove(state, { todo }) {
-    state.tasks.splice(state.tasks.indexOf(todo), 1)
+  remove(state, { task }) {
+    state.tasks.splice(state.tasks.indexOf(task), 1)
   },
-  toggle(state, todo) {
-    todo.done = !todo.done
+  toggle(state, task) {
+    task.done = !task.done
   },
 }
 
@@ -29,5 +29,12 @@ export const actions = {
       'https://6368e81715219b849609f2b8.mockapi.io/api/v1/tasks'
     )
     commit('store', tasks)
+  },
+  async addTask({ commit }, todo) {
+    const task = await this.$axios.$post(
+      'https://6368e81715219b849609f2b8.mockapi.io/api/v1/tasks',
+      todo
+    )
+    commit('add', task)
   },
 }
