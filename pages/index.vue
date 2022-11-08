@@ -2,8 +2,12 @@
   <div id="app">
     <h1>My To-Do List</h1>
     <ul>
-      <li>
-        <to-do-item label="My ToDo Item" :done="true"></to-do-item>
+      <li v-for="item in ToDoItems" :key="item.id">
+        <to-do-item
+          :id="item.id"
+          :label="item.label"
+          :done="item.done"
+        ></to-do-item>
       </li>
     </ul>
   </div>
@@ -11,6 +15,13 @@
 
 <script>
 export default {
-  name: 'IndexPage',
+  computed: {
+    ToDoItems() {
+      return this.$store.getters['todos/get']
+    },
+  },
+  created() {
+    this.$store.dispatch('todos/getTasks')
+  },
 }
 </script>
