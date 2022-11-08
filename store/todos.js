@@ -15,34 +15,43 @@ export const mutations = {
   add(state, task) {
     state.tasks.push(task)
   },
-  remove(state, { task }) {
-    state.tasks.splice(state.tasks.indexOf(task), 1)
+  remove(state, task) {
+    const index = state.tasks.findIndex((item) => item.id === task.id)
+    state.tasks.splice(index, 1)
   },
   toggle(state, task) {
     const todo = state.tasks.find((item) => item.id === task.id)
     todo.done = task.done
   },
+  edit(state, task) {
+    const todo = state.tasks.find((item) => item.id === task.id)
+    todo.label = task.label
+  },
 }
 
 export const actions = {
   async getTasks({ commit }) {
-    const tasks = await this.$axios.$get(
-      'https://6368e81715219b849609f2b8.mockapi.io/api/v1/tasks'
-    )
+    const tasks = await this.$axios.$get('/tasks')
     commit('store', tasks)
   },
   async addTask({ commit }, todo) {
-    const task = await this.$axios.$post(
-      'https://6368e81715219b849609f2b8.mockapi.io/api/v1/tasks',
-      todo
-    )
+    const task = await this.$axios.$post('/tasks', todo)
     commit('add', task)
   },
   async toggleTask({ commit }, todo) {
-    const task = await this.$axios.$put(
-      `https://6368e81715219b849609f2b8.mockapi.io/api/v1/tasks/${todo.id}`,
-      { done: !todo.done }
-    )
+    const task = await this.$axios.$put(`/tasks/${todo.id}`, {
+      done: !todo.done,
+    })
     commit('toggle', task)
+  },
+  async removeTask({ commit }, todo) {
+    const task = await this.$axios.$delete(`/tasks/${todo.id}`)
+    commit('remove', task)
+  },
+  async editTask({ commit }, todo) {
+    const task = await this.$axios.$put(`/tasks/${todo.id}`, {
+      label: todo.label,
+    })
+    commit('edit', task)
   },
 }
