@@ -32,26 +32,26 @@ export const mutations = {
 export const actions = {
   async getTasks({ commit }) {
     const tasks = await this.$axios.$get('/tasks')
-    commit('store', tasks)
+    commit('store', tasks.data)
   },
   async addTask({ commit }, todo) {
     const task = await this.$axios.$post('/tasks', todo)
-    commit('add', task)
+    commit('add', task.data)
   },
   async toggleTask({ commit }, todo) {
     const task = await this.$axios.$put(`/tasks/${todo.id}`, {
       done: !todo.done,
     })
-    commit('toggle', task)
+    commit('toggle', task.data)
   },
   async removeTask({ commit }, todo) {
     const task = await this.$axios.$delete(`/tasks/${todo.id}`)
-    commit('remove', task)
+    commit('remove', task.data)
   },
   async editTask({ commit }, todo) {
     const task = await this.$axios.$put(`/tasks/${todo.id}`, {
       label: todo.label,
     })
-    commit('edit', task)
+    commit('edit', task.data)
   },
 }
